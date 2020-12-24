@@ -1,0 +1,24 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    
+    <div class="container">
+        {% for list in listing %}
+        <div class="container m-5 " >
+            <div class="row  rounded d-flex align-items-center" style="background-color: rgb(225, 233, 230);" >
+                <div class="col  d-flex justify-content-center">
+                    <img src="{{list.image_link}}" class="float-left" width="200px"  alt="">
+                </div>
+                <div class="col d-flex-column-reverse  ">
+                    <h4>{{list.title}}</h4>
+                    <h4>Price: <span class="h5">${{list.starting_bid}}</span></h4> 
+                    <p>{{list.description}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+   
+    
+{% endblock %}
