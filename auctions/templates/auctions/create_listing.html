@@ -2,6 +2,7 @@
 
 {% block body%}
     <form  method="POST">
+       
         {% csrf_token %}
         <h6>Title:</h6> {{form.title}}
         <h6>Description:</h6> {{form.description}}

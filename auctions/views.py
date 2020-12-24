@@ -82,4 +82,28 @@ def create_listing(request):
     return render(request,"auctions/create_listing.html",{
         'form':form
     })
-  
+def listing_page(request,list_id):
+    
+    if len(watchlist.objects.filter(item_id=list_id))==1:
+   
+        blob=True
+        if request.method=="POST":
+            item = watchlist.objects.filter(item_id=list_id)
+            item.delete()
+            return HttpResponseRedirect(reverse("listing_page",args=(list_id,)))
+    else:
+        blob=False
+        if request.method=="POST":
+            b = watchlist(item = Listing.objects.get(pk=list_id))
+            b.save()
+
+            return HttpResponseRedirect(reverse("listing_page",args=(list_id,)))
+
+    
+
+
+    return render(request,"auctions/listing_page.html",{
+        "list":Listing.objects.get(pk=list_id),
+        "in_watchlist":blob
+     
+    })

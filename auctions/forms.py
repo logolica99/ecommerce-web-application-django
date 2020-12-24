@@ -6,3 +6,8 @@ class ListingForm(ModelForm):
     class Meta:
         model = Listing
         fields='__all__'
+
+class WatchlistForm(ModelForm):
+    class Meta:
+        model = watchlist
+        fields="__all__"

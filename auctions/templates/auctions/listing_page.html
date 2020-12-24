@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing: {{list.title}}</h2>
+    <img src="{{list.image_link}}" width="350" alt="">
+    <br>
+<br>
+    <p>{{list.description}}</p>
+    <br>
+    <br>
+    <h2>${{list.starting_bid}}</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% if in_watchlist %}
+            <input type="submit" value="Remove from watchlist">
+        {% else %}
+     
+            <input type="submit" value="Add to watchlist">
+        
+        {% endif %}
+  
+    </form>
+{% endblock %}
