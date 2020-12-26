@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container">
+    {% for list in watchlists%}
+    <a href="{% url 'listing_page' list.item.id %}">
+    <div class="container m-5 " >
+        <div class="row  rounded d-flex align-items-center" style="background-color: rgb(225, 233, 230);" >
+            <div class="col  d-flex justify-content-center">
+                <img src="{{list.item.image_link}}" class="float-left" width="200px"  alt="">
+            </div>
+            <div class="col d-flex-column-reverse  ">
+                <h4>{{list.item.title}}</h4>
+                <h4>Price: <span class="h5">${{list.item.starting_bid}}</span></h4> 
+                <p>{{list.item.description}}</p>
+            </div>
+       
+        </div>
+    </a>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

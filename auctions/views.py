@@ -69,7 +69,10 @@ def Categories(request):
     
     pass
 def Watchlist(request):
-    pass
+ 
+    
+    context ={"watchlists": watchlist.objects.filter(user=request.user.id)}
+    return render(request,"auctions/watchlist.html",context)
 def create_listing(request):
     
     form = ListingForm()
@@ -94,7 +97,7 @@ def listing_page(request,list_id):
     else:
         blob=False
         if request.method=="POST":
-            b = watchlist(item = Listing.objects.get(pk=list_id))
+            b = watchlist(item = Listing.objects.get(pk=list_id),user=User.objects.get(pk=request.user.id))
             b.save()
 
             return HttpResponseRedirect(reverse("listing_page",args=(list_id,)))

@@ -16,5 +16,6 @@ class Listing(models.Model):
     
 class watchlist(models.Model):
     item = models.ForeignKey(Listing,on_delete=models.CASCADE,unique=True,related_name="watchlist" )
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="watchlists" ,default="0")
     def __str__(self):
         return f"{self.item}"
