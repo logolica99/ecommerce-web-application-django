@@ -1,27 +1,27 @@
 {% extends "auctions/layout.html" %}
 
+
 {% block body %}
 <div class="container">
-    {% for list in watchlists%}
-    <a href="{% url 'listing_page' list.item.id %}">
+    {% for item in items %}
+    <a href="{% url 'listing_page' item.id%}">
     <div class="container m-5 " >
         <div class="row  rounded d-flex align-items-center" style="background-color: rgb(225, 233, 230);" >
             <div class="col  d-flex justify-content-center">
-                <img src="{{list.item.image_link}}" class="float-left" width="200px"  alt="">
+                <img src="{{item.image_link}}" class="float-left" width="200px"  alt="">
             </div>
             <div class="col d-flex-column-reverse  ">
-                <h4>{{list.item.title}}</h4>
-                <h4>Price: <span class="h5">${{list.item.starting_bid}}</span></h4> 
-                <p>{{list.item.description}}</p>
+                <h4>{{item.title}}</h4>
+                <h4>Price: <span class="h5">${{item.starting_bid}}</span></h4> 
+                <p>{{item.description}}</p>
             </div>
        
         </div>
     </a>
     </div>
     {% empty %}
-    <h4>No Item in watchlist</h4>
+        <h4>No item</h4>
     {% endfor %}
 </div>
-
 
 {% endblock %}

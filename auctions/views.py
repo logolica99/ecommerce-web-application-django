@@ -66,8 +66,8 @@ def register(request):
 
 
 def Categories(request):
-    
-    pass
+    context={}
+    return render(request, "auctions/categories.html" ,context)
 def Watchlist(request):
  
     
@@ -87,7 +87,7 @@ def create_listing(request):
     })
 def listing_page(request,list_id):
     
-    if len(watchlist.objects.filter(item_id=list_id))==1:
+    if len(watchlist.objects.filter(item_id=list_id,user=request.user.id))==1:
    
         blob=True
         if request.method=="POST":
@@ -110,3 +110,7 @@ def listing_page(request,list_id):
         "in_watchlist":blob
      
     })
+
+def specific_category(request, category):
+    context={"items":Listing.objects.filter(category=category)}
+    return render(request,"auctions/category.html",context)
