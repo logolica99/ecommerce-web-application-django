@@ -86,28 +86,56 @@ def create_listing(request):
         'form':form
     })
 def listing_page(request,list_id):
+    product = Listing.objects.get(id=list_id)
+    form = ListingForm(instance=product)
     
     if len(watchlist.objects.filter(item_id=list_id,user=request.user.id))==1:
    
         blob=True
-        if request.method=="POST":
+        if request.method=="POST" and  'watchlist' in request.POST:
             item = watchlist.objects.filter(item_id=list_id)
             item.delete()
             return HttpResponseRedirect(reverse("listing_page",args=(list_id,)))
     else:
         blob=False
-        if request.method=="POST":
+        if request.method=="POST" and 'watchlist' in request.POST:
             b = watchlist(item = Listing.objects.get(pk=list_id),user=User.objects.get(pk=request.user.id))
             b.save()
 
             return HttpResponseRedirect(reverse("listing_page",args=(list_id,)))
 
     
+    error=""
+    if request.method=="POST" and  'watchlist' not in request.POST:
+        
+        
+        if int(request.POST['starting_bid']) <= Listing.objects.get(id=list_id).starting_bid:
+            error="NOT enough money"
+          
+            
+        else:
+            product.starting_bid = request.POST['starting_bid']
+            user = User.objects.get(id=request.user.id)
+            hello=bidding.objects.create(listing=product,bid=request.POST['starting_bid'])
+            hello.bidded_user.add(user)
+            hello.save()
+            product.save()
+            return HttpResponseRedirect(reverse("listing_page",args=(list_id,)))
+    
 
-
+                
+        
+  
+    if request.user.id == Listing.objects.get(id=list_id).user.id:
+        owner=True
+    else:
+        owner=False
     return render(request,"auctions/listing_page.html",{
         "list":Listing.objects.get(pk=list_id),
-        "in_watchlist":blob
+        "in_watchlist":blob,
+        "form": form,
+        'owner':owner,
+        "error":error
      
     })
 

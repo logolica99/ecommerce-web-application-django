@@ -12,12 +12,24 @@
     <form action="" method="POST">
         {% csrf_token %}
         {% if in_watchlist %}
-            <input type="submit" value="Remove from watchlist">
+            <button class="btn btn-primary" type="submit" name="watchlist">Remove from watchlist</button>
         {% else %}
      
-            <input type="submit" value="Add to watchlist">
+            
+            <button  class="btn btn-primary" type="submit" name="watchlist">Add to watchlist</button>
         
         {% endif %}
   
     </form>
+    {% if  not owner %}
+    <h5 style="color: red;">{{error}}</h5>
+    <form action="" method="POST">
+        {% csrf_token %}
+        ${{form.starting_bid}}
+        <button class="btn btn-primary" type="submit"  >Bid</button>
+
+    </form>
+    {% else %}
+        
+    {%endif%}
 {% endblock %}
