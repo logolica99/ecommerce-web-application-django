@@ -1,6 +1,9 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    {% if won%}
+    <h2 style="color: rgb(93, 180, 93);">You have won the product</h2>
+    {% endif %}
     <h2>Listing: {{list.title}}</h2>
     <img src="{{list.image_link}}" width="350" alt="">
     <br>
@@ -9,27 +12,41 @@
     <br>
     <br>
     <h2>${{list.starting_bid}}</h2>
-    <form action="" method="POST">
-        {% csrf_token %}
-        {% if in_watchlist %}
-            <button class="btn btn-primary" type="submit" name="watchlist">Remove from watchlist</button>
-        {% else %}
-     
-            
-            <button  class="btn btn-primary" type="submit" name="watchlist">Add to watchlist</button>
-        
-        {% endif %}
-  
-    </form>
-    {% if  not owner %}
-    <h5 style="color: red;">{{error}}</h5>
-    <form action="" method="POST">
-        {% csrf_token %}
-        ${{form.starting_bid}}
-        <button class="btn btn-primary" type="submit"  >Bid</button>
 
-    </form>
-    {% else %}
+    {% if user.is_authenticated %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            {% if in_watchlist %}
+                <button class="btn btn-primary" type="submit" name="watchlist">Remove from watchlist</button>
+            {% else %}
         
-    {%endif%}
+                
+                <button  class="btn btn-primary" type="submit" name="watchlist">Add to watchlist</button>
+            
+            {% endif %}
+    
+        </form>
+        {% if not if_active%}
+        <h5 style="color: red;">The item in closed.</h5>
+        {% endif %}
+        
+        
+        
+        {% if  not owner and if_active %}
+            <h5 style="color: red;">{{error}}</h5>
+            <form action="" method="POST">
+                {% csrf_token %}
+                ${{form.starting_bid}}
+                <button class="btn btn-primary" type="submit"  >Bid</button>
+
+            </form>
+        {% elif owner %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                Active or Closed:
+                {{form.active}}
+                <input class="btn btn-warning" type="submit" value="submit">
+            </form>
+        {% endif %}
+    {% endif %}
 {% endblock %}

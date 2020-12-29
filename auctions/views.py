@@ -76,6 +76,7 @@ def Watchlist(request):
 def create_listing(request):
     
     form = ListingForm()
+
     if request.method == 'POST':
         form = ListingForm(request.POST)
         if form.is_valid():
@@ -86,9 +87,19 @@ def create_listing(request):
         'form':form
     })
 def listing_page(request,list_id):
+    won = False
+    if len(product_won.objects.filter(listing__id=list_id)) > 0:
+        if product_won.objects.filter(listing__id=list_id)[0].listing.id==list_id and product_won.objects.filter(listing__id=list_id)[0].user.id==request.user.id :
+            won = True 
+
+
+#and product_won.objects.filter(listing__id=list_id)[0].user.id==request.user.id
     product = Listing.objects.get(id=list_id)
     form = ListingForm(instance=product)
-    
+    if Listing.objects.get(id=list_id).active =="Active":
+        if_active = True
+    else:
+        if_active=False
     if len(watchlist.objects.filter(item_id=list_id,user=request.user.id))==1:
    
         blob=True
@@ -106,7 +117,7 @@ def listing_page(request,list_id):
 
     
     error=""
-    if request.method=="POST" and  'watchlist' not in request.POST:
+    if request.method=="POST" and  'starting_bid' in request.POST:
         
         
         if int(request.POST['starting_bid']) <= Listing.objects.get(id=list_id).starting_bid:
@@ -123,8 +134,13 @@ def listing_page(request,list_id):
             return HttpResponseRedirect(reverse("listing_page",args=(list_id,)))
     
 
-                
-        
+    if request.method=="POST" and  'active' in request.POST:           
+        product.active=request.POST['active']
+        product.save()
+        if request.POST['active'] == 'Close':
+            product_won.objects.create(user=User.objects.get(id=bidding.objects.filter(listing__id =list_id).last().bidded_user.first().id), listing=Listing.objects.get(id=list_id))
+
+        return HttpResponseRedirect(reverse("listing_page",args=(list_id,)))
   
     if request.user.id == Listing.objects.get(id=list_id).user.id:
         owner=True
@@ -135,7 +151,9 @@ def listing_page(request,list_id):
         "in_watchlist":blob,
         "form": form,
         'owner':owner,
-        "error":error
+        "error":error,
+        'if_active':if_active,
+        'won':won
      
     })
 
