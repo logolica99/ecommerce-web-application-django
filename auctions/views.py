@@ -87,6 +87,7 @@ def create_listing(request):
         'form':form
     })
 def listing_page(request,list_id):
+    comment_form = ProductComment()
     won = False
     if len(product_won.objects.filter(listing__id=list_id)) > 0:
         if product_won.objects.filter(listing__id=list_id)[0].listing.id==list_id and product_won.objects.filter(listing__id=list_id)[0].user.id==request.user.id :
@@ -146,6 +147,13 @@ def listing_page(request,list_id):
         owner=True
     else:
         owner=False
+    if request.method == "POST"  and 'comment' in request.POST:
+        print(request.POST['comment'])
+        product_comments.objects.create(user = User.objects.get(id=request.user.id),listing= Listing.objects.get(id=list_id),comment=request.POST['comment'])
+
+
+
+
     return render(request,"auctions/listing_page.html",{
         "list":Listing.objects.get(pk=list_id),
         "in_watchlist":blob,
@@ -153,7 +161,9 @@ def listing_page(request,list_id):
         'owner':owner,
         "error":error,
         'if_active':if_active,
-        'won':won
+        'won':won,
+        'comments':product_comments.objects.filter(listing= Listing.objects.get(id=list_id)),
+        'comment_form':comment_form
      
     })
 

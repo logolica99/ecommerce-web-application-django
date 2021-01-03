@@ -48,5 +48,18 @@
                 <input class="btn btn-warning" type="submit" value="submit">
             </form>
         {% endif %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h5>Comment:</h5>{{comment_form.comment}}
+            <button class="btn btn-primary" type="submit" >Comment</button>
+        </form>
     {% endif %}
+    {% for comment in comments %}
+        <dl>
+            <dt>{{comment.user}}</dt>
+            <dd>
+                {{comment.comment}}
+            </dd>
+        </dl>
+    {% endfor %}
 {% endblock %}
