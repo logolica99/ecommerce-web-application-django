@@ -78,7 +78,20 @@ def create_listing(request):
     form = ListingForm()
 
     if request.method == 'POST':
-        form = ListingForm(request.POST)
+        hello = request.POST
+        hello = {
+            'title':request.POST['title'],
+            'description':request.POST['description'],
+            'starting_bid':request.POST['starting_bid'],
+            'image_link':request.POST['image_link'],
+            'category':request.POST['category'],
+            'active':'Active',
+            'user':User.objects.get(id=request.user.id)
+        }
+        print(hello)
+       #,User.objects.get(id=request.user.id)
+        form = ListingForm(hello)
+        
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('index'))

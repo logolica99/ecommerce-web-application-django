@@ -13,7 +13,7 @@ class Listing(models.Model):
     category = models.CharField(max_length=200,null=True, choices=Category)
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="Products")
     active_category=(('Active','Active'),('Close','Close'))
-    active = models.CharField(max_length=200,null=True, choices=active_category)
+    active = models.CharField(max_length=200,null=True, choices=active_category,default="Active")
     def __str__(self):
         return f"{self.title}"
     
